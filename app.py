@@ -35,6 +35,11 @@ def analyze_video():
     if file.filename == '':
         return jsonify({'error': 'No selected file'}), 400
     
+    # Validate file extension
+    allowed_extensions = {'mp4', 'avi', 'mov', 'mkv'}
+    if '.' not in file.filename or file.filename.rsplit('.', 1)[1].lower() not in allowed_extensions:
+        return jsonify({'error': 'Invalid file format. Supported formats: mp4, avi, mov, mkv'}), 400
+    
     if file:
         filename = secure_filename(file.filename)
         filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
@@ -76,8 +81,12 @@ def analyze_video():
             
             return jsonify(response)
             
+        except ValueError as e:
+            return jsonify({'error': f"Video processing error: {str(e)}"}), 400
+        except RuntimeError as e:
+            return jsonify({'error': f"Model analysis error: {str(e)}"}), 500
         except Exception as e:
-            return jsonify({'error': str(e)}), 500
+            return jsonify({'error': f"Unexpected error: {str(e)}"}), 500
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=port, debug=debug_mode) 
+    app.run(host='0.0.0.0', port=port, debug=debug_mode)
