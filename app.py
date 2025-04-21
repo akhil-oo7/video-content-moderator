@@ -82,11 +82,11 @@ def analyze_video():
             return jsonify(response)
             
         except ValueError as e:
-            return jsonify({'error': f"Video processing error: {str(e)}"}), 400
+            return jsonify({'error': f"Video processing error: {str(e)}. Please check if the video format is supported and not corrupted."}), 400
         except RuntimeError as e:
-            return jsonify({'error': f"Model analysis error: {str(e)}"}), 500
+            return jsonify({'error': f"Model analysis error: {str(e)}. Please verify the model files exist in models/best_model/ and have correct permissions. If running on Render, ensure the model files are properly included in your deployment."}), 500
         except Exception as e:
-            return jsonify({'error': f"Unexpected error: {str(e)}"}), 500
+            return jsonify({'error': f"Unexpected error during analysis: {str(e)}. Please check server logs for details. If running on Render, ensure all dependencies are properly installed and model files are accessible."}), 500
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=port, debug=debug_mode)
