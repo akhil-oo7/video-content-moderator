@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 
 load_dotenv()  # Load environment variables from .env file
 
-# Now you can access the variables using os.environ
+# Access variables using os.environ
 port = int(os.environ.get("PORT", 5000))
 debug_mode = os.environ.get("DEBUG", "False") == "True"
 
