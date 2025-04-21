@@ -3,6 +3,13 @@ import os
 from werkzeug.utils import secure_filename
 from video_processor import VideoProcessor
 from content_moderator import ContentModerator
+from dotenv import load_dotenv
+
+load_dotenv()  # Load environment variables from .env file
+
+# Now you can access the variables using os.environ
+port = int(os.environ.get("PORT", 5000))
+debug_mode = os.environ.get("DEBUG", "False") == "True"
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'uploads'
@@ -73,5 +80,4 @@ def analyze_video():
             return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port=port, debug=False) 
+    app.run(host='0.0.0.0', port=port, debug=debug_mode) 
